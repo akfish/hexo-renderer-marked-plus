@@ -31,17 +31,25 @@ r.heading = function(text, level){
   return htmlTag('h' + level, {id: id}, text) + '\n';
 };
 
-marked.setOptions({
-  renderer: r,
-  langPrefix: '',
-  highlight: function(code, lang){
-    return highlight(code, {lang: lang, gutter: false, wrap: false});
-  }
-});
+
+var initialized = false;
 
 var renderer = function(data, options){
   headingId = {};
-
+  if (!initialized) {
+    if (typeof(hexo.overrideMarkedRenderer) == 'function') {
+      console.log("Overriding marked renderer...");
+      hexo.overrideMarkedRenderer(r);
+    }
+    marked.setOptions({
+      renderer: r,
+      langPrefix: '',
+      highlight: function(code, lang){
+        return highlight(code, {lang: lang, gutter: false, wrap: false});
+      }
+    });
+    initialized = true;
+  }
   return marked(data.text, _.extend({
     gfm: true,
     pedantic: false,

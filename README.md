@@ -1,11 +1,29 @@
 # [Markdown] renderer
 
 Add support for [Markdown]. This plugin uses [marked] as render engine.
+This fork enables theme developer to have more control over generated HTML format.
+
+## Override Marked Renderer
+
+Marked has configurable renderer (do not confuse with Hexo's renderer) for custom HTML formating.
+Theme developers can override marked renderer within a Hexo theme script:
+
+```js
+hexo.overrideMarkedRenderer = function (r) {
+  // r is the renderer object
+  r.heading = function (text, level) {
+    return "Your custom heading format"
+  }
+  // Other methods
+}
+```
+
+For more information on how to override marked renderer, see [here](https://github.com/chjj/marked#overriding-renderer-methods)
 
 ## Install
 
 ``` bash
-$ npm install hexo-renderer-marked --save
+$ npm install hexo-renderer-marked-plus --save
 ```
 
 ## Options

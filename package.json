@@ -1,14 +1,14 @@
 {
-  "name": "hexo-renderer-marked",
+  "name": "hexo-renderer-marked-plus",
   "version": "0.1.0",
-  "description": "Markdown renderer plugin for Hexo",
+  "description": "Markdown renderer plugin for Hexo with configuable renderer",
   "main": "index",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hexojs/hexo-renderer-marked.git"
+    "url": "https://github.com/akfish/hexo-renderer-marked-plus.git"
   },
   "bugs": {
-    "url": "https://github.com/hexojs/hexo-renderer-marked/issues"
+    "url": "https://github.com/akfish/hexo-renderer-marked-plus/issues"
   },
   "keywords": [
     "hexo",
@@ -16,10 +16,10 @@
     "marked",
     "renderer"
   ],
-  "author": "Tommy Chen <tommy351@gmail.com> (http://zespia.tw)",
+  "author": "AKFish <akfish@gmail.com> (http://catx.me)",
   "license": {
     "type": "MIT",
-    "url": "https://raw.github.com/tommy351/hexo/master/LICENSE"
+    "url": "https://raw.github.com/akfish/hexo-renderer-marked-plus/master/LICENSE"
   },
   "dependencies": {
     "marked": "^0.3.2",
