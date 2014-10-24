@@ -14,10 +14,10 @@ var anchorId = function(str){
     .replace(/-{2,}/g, '-');
 };
 
-var r = new marked.Renderer();
+var DefaultRenderer = marked.Renderer;
 
 // Add id attribute to headings
-r.heading = function(text, level){
+DefaultRenderer.prototype.heading = function(text, level){
   var id = anchorId(stripHtml(text));
 
   // Add a number after id if repeated
@@ -31,26 +31,45 @@ r.heading = function(text, level){
   return htmlTag('h' + level, {id: id}, text) + '\n';
 };
 
+DefaultRenderer.override = function (prop) {
+  if (prop == null || typeof(prop) != 'object') {
+    console.log("Use default renderer");
+    return DefaultRenderer;
+  }
+  console.log("Use overrided renderer")
+  var overrided = function () { DefaultRenderer.call(this); }
+  overrided.prototype = _.create(DefaultRenderer.prototype, _.assign({
+    '_super': DefaultRenderer.prototype,
+    'constructor': overrided
+  }, prop));
+  return overrided;
+}
+
+var Renderer = DefaultRenderer;//.override(hexo.markedRenderer);
+
+marked.setOptions({
+  langPrefix: '',
+  highlight: function(code, lang){
+    return highlight(code, {lang: lang, gutter: false, wrap: false});
+  }
+});
 
 var initialized = false;
 
 var renderer = function(data, options){
   headingId = {};
   if (!initialized) {
-    if (typeof(hexo.overrideMarkedRenderer) == 'function') {
-      console.log("Overriding marked renderer...");
-      hexo.overrideMarkedRenderer(r);
-    }
-    marked.setOptions({
-      renderer: r,
-      langPrefix: '',
-      highlight: function(code, lang){
-        return highlight(code, {lang: lang, gutter: false, wrap: false});
-      }
-    });
+    Renderer = DefaultRenderer.override(hexo.markedRenderer);
     initialized = true;
   }
-  return marked(data.text, _.extend({
+  var r = new Renderer();
+
+  if (typeof(r.init) == 'function') {
+    r.init();
+  }
+
+  var html = marked(data.text, _.extend({
+    renderer: r,
     gfm: true,
     pedantic: false,
     sanitize: false,
@@ -59,6 +78,11 @@ var renderer = function(data, options){
     smartLists: true,
     smartypants: true
   }, hexo.config.marked, options));
+
+  if (typeof(r.eof) == 'function') {
+    html += r.eof();
+  }
+  return html;
 };
 
 hexo.extend.renderer.register('md', 'html', renderer, true);

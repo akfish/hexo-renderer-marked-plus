@@ -9,12 +9,20 @@ Marked has configurable renderer (do not confuse with Hexo's renderer) for custo
 Theme developers can override marked renderer within a Hexo theme script:
 
 ```js
-hexo.overrideMarkedRenderer = function (r) {
-  // r is the renderer object
-  r.heading = function (text, level) {
+hexo.markedRenderer = {
+  init: function() {
+    // Called before rendering a post
+  },
+  heading: function(text, level) {
+    // Default method can be accessed via:
+    // this._super.heading(text, level)
     return "Your custom heading format"
+  },
+  eof: function() {
+    // Called after marked finish rendering
+    // Returned string will be appended to output HTML
+    return '';
   }
-  // Other methods
 }
 ```
 

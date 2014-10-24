@@ -1,6 +1,6 @@
 {
   "name": "hexo-renderer-marked-plus",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Markdown renderer plugin for Hexo with configuable renderer",
   "main": "index",
   "repository": {
